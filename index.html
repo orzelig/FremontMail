@@ -4,48 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Composer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        #mailtoLink {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
     <h2>Email Composer</h2>
 
     <!-- Form for email details -->
-    <form id="emailForm">
-        <div>
+    <div id="emailForm">
+        <div class="form-group">
             <label for="recipient">Recipient:</label>
-            <input type="email" id="recipient" name="recipient">
+            <select id="recipient" name="recipient" onchange="updateMailtoLink()">
+                <option value="user1@example.com">user1@example.com</option>
+                <option value="user2@example.com">user2@example.com</option>
+                <option value="user3@example.com">user3@example.com</option>
+            </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="subject">Subject:</label>
-            <input type="text" id="subject" name="subject">
+            <select id="subject" name="subject" onchange="updateMailtoLink()">
+                <option value="Inquiry">Inquiry</option>
+                <option value="Feedback">Feedback</option>
+                <option value="Support">Support</option>
+            </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="body">Body:</label>
-            <textarea id="body" name="body" rows="5" cols="33"></textarea>
+            <select id="body" name="body" onchange="updateMailtoLink()">
+                <option value="I have a question about...">I have a question about...</option>
+                <option value="I would like to provide feedback...">I would like to provide feedback...</option>
+                <option value="I need support with...">I need support with...</option>
+            </select>
         </div>
-        <button type="button" onclick="generateMailto()">Create Mailto Link</button>
-    </form>
+    </div>
 
-    <!-- Display the generated mailto link -->
-    <p>Generated Link: <a id="mailtoLink" href="#">Click Here</a></p>
+    <!-- Display the mailto link -->
+    <a id="mailtoLink" href="#" onclick="event.preventDefault();">Compose Email</a>
 
     <script>
-        function generateMailto() {
-            // Get form values
+        function updateMailtoLink() {
+            // Get selected values
             var recipient = document.getElementById('recipient').value;
             var subject = document.getElementById('subject').value;
             var body = document.getElementById('body').value;
 
-            // Encode subject and body to ensure the URL is valid
+            // Encode subject and body
             subject = encodeURIComponent(subject);
             body = encodeURIComponent(body);
 
-            // Create the mailto link
+            // Update the mailto link
             var link = 'mailto:' + recipient + '?subject=' + subject + '&body=' + body;
-
-            // Set the href of the mailto link
             document.getElementById('mailtoLink').href = link;
         }
+
+        // Initialize the mailto link when the page loads
+        document.addEventListener('DOMContentLoaded', updateMailtoLink);
     </script>
 
 </body>
