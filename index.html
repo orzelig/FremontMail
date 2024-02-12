@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Email Composer with Editable Subject</title>
+    <title>Responsive Email Composer with Predefined Subjects and Bodies</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,7 +39,7 @@
 </head>
 <body>
 
-    <h2>Responsive Email Composer with Editable Subject</h2>
+    <h2>Responsive Email Composer with Predefined Subjects and Bodies</h2>
 
     <!-- Form for email details -->
     <div id="emailForm">
@@ -61,13 +61,12 @@
         </div>
         <div class="form-group">
             <label for="subjectSelect">Choose a Subject:</label>
-            <select id="subjectSelect" onchange="setSubject()">
-                <option value="Preserve Unity: Reject Divisive Resolutions">Preserve Unity: Reject Divisive Resolutions</option>
-                <option value="Stop Hate: No to Biased Resolutions">Stop Hate: No to Biased Resolutions</option>
-                <option value="Choose Empathy Over Division">Choose Empathy Over Division</option>
-                <option value="Unity Not Division: Reject Conflict Resolutions">Unity Not Division: Reject Conflict Resolutions</option>
-                <option value="Stand Together: Say No to Divisive Motions">Stand Together: Say No to Divisive Motions</option>
-                <option value="">Custom Subject</option>
+            <select id="subjectSelect" onchange="populateBody()">
+                <option value="0">Preserve Unity: Reject Divisive Resolutions</option>
+                <option value="1">Stop Hate: No to Biased Israel-Hamas Resolutions</option>
+                <option value="2">Choose Empathy Over Division</option>
+                <option value="3">Unity Not Division: Reject Conflict Resolutions</option>
+                <option value="4">Stand Together: Say No to Divisive Motions</option>
             </select>
         </div>
         <div class="form-group">
@@ -76,7 +75,7 @@
         </div>
         <div class="form-group">
             <label for="body">Body:</label>
-            <textarea id="body" name="body" rows="5" oninput="updateMailtoLink()">I have a question about...</textarea>
+            <textarea id="body" name="body" rows="10" oninput="updateMailtoLink()"></textarea>
         </div>
     </div>
 
@@ -84,10 +83,22 @@
     <a id="mailtoLink" href="#" onclick="updateMailtoLink();">Compose Email</a>
 
     <script>
-        function setSubject() {
-            var subjectSelect = document.getElementById('subjectSelect').value;
-            document.getElementById('subject').value = subjectSelect;
-            updateMailtoLink();
+        var subjectsAndBodies = [
+            {
+                "subject": "Preserve Unity: Reject Divisive Resolutions",
+                "body": "Dear Council Member,\\n\\nAs a Fremont resident deeply invested in the harmony of our community, I urge you to consider the impact of adopting resolutions concerning the Israel-Hamas conflict. Recent events in the Bay Area have shown us the volatile mix of heightened antisemitism and Islamophobia. Introducing one-sided narratives will only exacerbate these tensions, dividing our Muslim and Jewish neighbors further.\\n\\nThe scenes of discord in Oakland and Richmond, marked by hours of public comment filled with hate speech, serve as a caution. We must strive to be a beacon of unity, especially in these challenging times.\\n\\nLet us lead with empathy and inclusiveness, ensuring Fremont remains a welcoming community for all. Rejecting divisive resolutions is a step toward healing and peace.\\n\\nSincerely,\\n[Your Name]"
+            },
+            // Add other subjects and bodies here following the same structure
+        ];
+
+        function populateBody() {
+            var selectedIndex = document.getElementById('subjectSelect').value;
+            var selectedSubjectAndBody = subjectsAndBodies[selectedIndex];
+            
+            document.getElementById('subject').value = selectedSubjectAndBody.subject;
+            document.getElementById('body').value = selectedSubjectAndBody.body.replace('\\n', '\n').replace('[Your Name]', ''); // Replace '[Your Name]' with an empty string initially
+            
+            updateMailtoLink(); // Update the mailto link to reflect the changes
         }
 
         function updateMailtoLink() {
@@ -96,7 +107,8 @@
             var subject = document.getElementById('subject').value;
             var body = document.getElementById('body').value;
 
-            var fullBody = `${body}\n\nFrom: ${from}`;
+            // Append "With gratitude, [Your Name]" to the body
+            var fullBody = `${body}\n\nWith gratitude,\n${from}`;
 
             subject = encodeURIComponent(subject);
             fullBody = encodeURIComponent(fullBody);
@@ -105,7 +117,10 @@
             document.getElementById('mailtoLink').href = link;
         }
 
-        document.addEventListener('DOMContentLoaded', updateMailtoLink);
+        // Initialize the page with the first subject and body
+        document.addEventListener('DOMContentLoaded', function() {
+            populateBody();
+        });
     </script>
 
 </body>
