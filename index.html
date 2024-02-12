@@ -1,11 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Composer</title>
+</head>
 <body>
 
-<h1>My First Heading</h1>
+    <h2>Email Composer</h2>
 
-<p>My first paragraph.</p>
+    <!-- Form for email details -->
+    <form id="emailForm">
+        <div>
+            <label for="recipient">Recipient:</label>
+            <input type="email" id="recipient" name="recipient">
+        </div>
+        <div>
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="subject">
+        </div>
+        <div>
+            <label for="body">Body:</label>
+            <textarea id="body" name="body" rows="5" cols="33"></textarea>
+        </div>
+        <button type="button" onclick="generateMailto()">Create Mailto Link</button>
+    </form>
+
+    <!-- Display the generated mailto link -->
+    <p>Generated Link: <a id="mailtoLink" href="#">Click Here</a></p>
+
+    <script>
+        function generateMailto() {
+            // Get form values
+            var recipient = document.getElementById('recipient').value;
+            var subject = document.getElementById('subject').value;
+            var body = document.getElementById('body').value;
+
+            // Encode subject and body to ensure the URL is valid
+            subject = encodeURIComponent(subject);
+            body = encodeURIComponent(body);
+
+            // Create the mailto link
+            var link = 'mailto:' + recipient + '?subject=' + subject + '&body=' + body;
+
+            // Set the href of the mailto link
+            document.getElementById('mailtoLink').href = link;
+        }
+    </script>
 
 </body>
 </html>
-
