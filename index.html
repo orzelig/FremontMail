@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Email Composer</title>
+    <title>Fremont Email Composer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@
             display: block;
             margin-bottom: 5px;
         }
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -46,9 +46,13 @@
         <div class="form-group">
             <label for="recipient">Recipient:</label>
             <select id="recipient" name="recipient" onchange="updateMailtoLink()">
-                <option value="user1@example.com">user1@example.com</option>
-                <option value="user2@example.com">user2@example.com</option>
-                <option value="user3@example.com">user3@example.com</option>
+                <option value="lmei@fremont.gov">Mayor Lily Mei</option>
+                <option value="vbacon@fremont.gov">Council Member Vinnie Bacon</option>
+                <option value="rljones@fremont.gov">Council Member Rick Jones</option>
+                <option value="rsalwan@fremont.gov">Vice Mayor Raj Salwan</option>
+                <option value="tkeng@fremont.gov">Council Member Teresa Keng</option>
+                <option value="yshao@fremont.gov">Council Member Yang Shao</option>
+                <option value="jkassan@fremont.gov">Council Member Jennie Kassan</option>
             </select>
         </div>
         <div class="form-group">
