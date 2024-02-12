@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fremont Email Composer</title>
+    <title>Responsive Email Composer with Editable Subject</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,10 +39,14 @@
 </head>
 <body>
 
-    <h2>Responsive Email Composer</h2>
+    <h2>Responsive Email Composer with Editable Subject</h2>
 
     <!-- Form for email details -->
     <div id="emailForm">
+        <div class="form-group">
+            <label for="from">From (Your Name):</label>
+            <input type="text" id="from" name="from" placeholder="Enter your name" oninput="updateMailtoLink()">
+        </div>
         <div class="form-group">
             <label for="recipient">Recipient:</label>
             <select id="recipient" name="recipient" onchange="updateMailtoLink()">
@@ -56,8 +60,19 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="subject">Subject:</label>
-            <input type="text" id="subject" name="subject" value="Inquiry" oninput="updateMailtoLink()">
+            <label for="subjectSelect">Choose a Subject:</label>
+            <select id="subjectSelect" onchange="setSubject()">
+                <option value="Preserve Unity: Reject Divisive Resolutions">Preserve Unity: Reject Divisive Resolutions</option>
+                <option value="Stop Hate: No to Biased Resolutions">Stop Hate: No to Biased Resolutions</option>
+                <option value="Choose Empathy Over Division">Choose Empathy Over Division</option>
+                <option value="Unity Not Division: Reject Conflict Resolutions">Unity Not Division: Reject Conflict Resolutions</option>
+                <option value="Stand Together: Say No to Divisive Motions">Stand Together: Say No to Divisive Motions</option>
+                <option value="">Custom Subject</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="subject">Edit Subject:</label>
+            <input type="text" id="subject" name="subject" value="Preserve Unity: Reject Divisive Resolutions" oninput="updateMailtoLink()">
         </div>
         <div class="form-group">
             <label for="body">Body:</label>
@@ -69,19 +84,27 @@
     <a id="mailtoLink" href="#" onclick="updateMailtoLink();">Compose Email</a>
 
     <script>
+        function setSubject() {
+            var subjectSelect = document.getElementById('subjectSelect').value;
+            document.getElementById('subject').value = subjectSelect;
+            updateMailtoLink();
+        }
+
         function updateMailtoLink() {
+            var from = document.getElementById('from').value;
             var recipient = document.getElementById('recipient').value;
             var subject = document.getElementById('subject').value;
             var body = document.getElementById('body').value;
 
-            subject = encodeURIComponent(subject);
-            body = encodeURIComponent(body);
+            var fullBody = `${body}\n\nFrom: ${from}`;
 
-            var link = 'mailto:' + recipient + '?subject=' + subject + '&body=' + body;
+            subject = encodeURIComponent(subject);
+            fullBody = encodeURIComponent(fullBody);
+
+            var link = 'mailto:' + recipient + '?subject=' + subject + '&body=' + fullBody;
             document.getElementById('mailtoLink').href = link;
         }
 
-        // Update the mailto link when the page loads to ensure it's ready for the first click
         document.addEventListener('DOMContentLoaded', updateMailtoLink);
     </script>
 
