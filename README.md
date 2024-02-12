@@ -4,6 +4,10 @@
 
 The Fremont Email Composer is a simple, web-based tool designed to facilitate residents of Fremont in composing and sending emails to city council members regarding community concerns. This tool allows users to select predefined subjects related to community issues and automatically formats the email body, subject, and recipient address based on user selection. Additionally, users have the option to send a BCC (Blind Carbon Copy) to a monitoring email address to help track the number of emails sent.
 
+## Access the App
+
+You can access the Fremont Email Composer directly by visiting [Fremont Email Composer](https://orzelig.github.io/FremontMail/).
+
 ## Features
 
 - **Predefined Subjects**: Users can choose from a list of subjects related to community concerns.
