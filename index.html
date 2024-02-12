@@ -77,6 +77,10 @@
             <label for="body">Body:</label>
             <textarea id="body" name="body" rows="10" oninput="updateMailtoLink()"></textarea>
         </div>
+        <div class="form-group">
+            <label for="sendCopy">Send a copy to us for counting:</label>
+            <input type="checkbox" id="sendCopy" name="sendCopy" checked>
+        </div>
     </div>
 
     <!-- Display the mailto link -->
@@ -117,20 +121,29 @@
     }
 
    function updateMailtoLink() {
-        var from = document.getElementById('from').value;
-        var recipient = document.getElementById('recipient').value;
-        var subject = document.getElementById('subject').value;
-        var body = document.getElementById('body').value;
+    var from = document.getElementById('from').value;
+    var recipient = document.getElementById('recipient').value;
+    var subject = document.getElementById('subject').value;
+    var body = document.getElementById('body').value;
+    var sendCopyChecked = document.getElementById('sendCopy').checked; // Get the state of the checkbox
 
-        // Append "With gratitude, [Your Name]" to the body if 'from' is not empty
-        var fullBody = body + (from ? "\n\nWith gratitude,\n" + from : "");
+    // Append "With gratitude, [Your Name]" to the body if 'from' is not empty
+    var fullBody = body + (from ? "\n\nWith gratitude,\n" + from : "");
 
-        subject = encodeURIComponent(subject);
-        fullBody = encodeURIComponent(fullBody); // Encode the full body for the mailto link
+    subject = encodeURIComponent(subject);
+    fullBody = encodeURIComponent(fullBody); // Encode the full body for the mailto link
 
-        var link = 'mailto:' + recipient + '?subject=' + subject + '&body=' + fullBody;
-        document.getElementById('mailtoLink').href = link;
+    var link = `mailto:${recipient}?subject=${subject}&body=${fullBody}`;
+
+    // Include BCC parameter in the mailto link if the checkbox is checked
+    if (sendCopyChecked) {
+        var bcc = "fremont_mail_counter@zelig.me";
+        link += `&bcc=${bcc}`;
     }
+
+    document.getElementById('mailtoLink').href = link;
+}
+
 
     // Initialize the page with the first subject and body
     document.addEventListener('DOMContentLoaded', function() {
