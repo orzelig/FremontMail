@@ -14,9 +14,16 @@ function populateBody() {
     var selectedIndex = document.getElementById('subjectSelect').value;
     var selectedSubjectAndBody = subjectsAndBodies[selectedIndex];
     
-    document.getElementById('subject').value = selectedSubjectAndBody.subject;
-    document.getElementById('body').value = selectedSubjectAndBody.body.replace(/\\n/g, '\n').replace('[Your Name]', ''); // Replace '\\n' with '\n' and '[Your Name]' with an empty string initially
-    
+    // Ensure that the selectedIndex is parsed as an integer, as it might be returned as a string
+    selectedIndex = parseInt(selectedIndex, 10);
+
+    if (selectedSubjectAndBody) {
+        document.getElementById('subject').value = selectedSubjectAndBody.subject;
+        document.getElementById('body').value = selectedSubjectAndBody.body.replace(/\\n/g, '\n').replace('[Your Name]', '');
+    } else {
+        console.error('Selected subject and body could not be found.');
+    }
+
     updateMailtoLink(); // Update the mailto link to reflect the changes
 }
 
