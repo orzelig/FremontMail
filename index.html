@@ -116,7 +116,7 @@
         updateMailtoLink(); // Update the mailto link to reflect the changes
     }
 
-    function updateMailtoLink() {
+   function updateMailtoLink() {
         var from = document.getElementById('from').value;
         var recipient = document.getElementById('recipient').value;
         var subject = document.getElementById('subject').value;
@@ -126,7 +126,7 @@
         var fullBody = body + (from ? "\n\nWith gratitude,\n" + from : "");
 
         subject = encodeURIComponent(subject);
-        fullBody = encodeURIComponent(fullBody.replace(/\n/g, '%0D%0A')); // Encode newlines for mailto link
+        fullBody = encodeURIComponent(fullBody); // Encode the full body for the mailto link
 
         var link = 'mailto:' + recipient + '?subject=' + subject + '&body=' + fullBody;
         document.getElementById('mailtoLink').href = link;
