@@ -1,3 +1,34 @@
+
+
+function loadSubjects() {
+    fetch('subjectsAndBodies.json')
+        .then(response => response.json())
+        .then(subjectsAndBodies => {
+            const subjectSelect = document.getElementById('subjectSelect');
+            // Clear existing options first, if necessary
+            subjectSelect.innerHTML = '';
+
+            subjectsAndBodies.forEach((item, index) => {
+                const option = document.createElement('option');
+                option.value = index; // Using the index as the value to keep track of selected option
+                option.textContent = item.subject;
+                subjectSelect.appendChild(option);
+            });
+
+            // Optionally, populate the body for the initially selected subject
+            populateBody();
+        })
+        .catch(error => console.error('Failed to load subjects:', error));
+}
+
+// Call this function when the page loads to populate the subjects dropdown
+document.addEventListener('DOMContentLoaded', function() {
+    loadSubjects();
+    loadRecipients();
+    // No need to call populateBody here if it's already being called at the end of loadSubjects
+});
+
+
 function populateBody() {
     fetch('subjectsAndBodies.json')
         .then(response => response.json())
