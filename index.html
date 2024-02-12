@@ -2,126 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Email Composer with Predefined Subjects and Bodies</title>
+    <title>Responsive Email Composer</title>
     <style>
-        body {
+        body, input, textarea, select {
             font-family: Arial, sans-serif;
-            padding: 20px;
-            margin: 0;
-            max-width: 100%;
-            overflow-x: hidden;
+            padding: 10px; margin: 0;
+            max-width: 100%; box-sizing: border-box;
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
         #mailtoLink {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
+            background-color: #4CAF50; color: white;
+            text-decoration: none; border-radius: 5px;
+            display: inline-block; cursor: pointer;
         }
     </style>
 </head>
 <body>
-
     <h2>Responsive Email Composer with Predefined Subjects and Bodies</h2>
-
-    <!-- Form for email details -->
     <div id="emailForm">
         <div class="form-group">
             <label for="from">From (Your Name):</label>
-            <input type="text" id="from" name="from" placeholder="Enter your name" oninput="updateMailtoLink()">
+            <input type="text" id="from" oninput="updateMailtoLink()">
         </div>
         <div class="form-group">
             <label for="recipient">Recipient:</label>
-            <select id="recipient" name="recipient" onchange="updateMailtoLink()">
-                <option value="lmei@fremont.gov">Mayor Lily Mei</option>
-                <option value="vbacon@fremont.gov">Council Member Vinnie Bacon</option>
-                <option value="rljones@fremont.gov">Council Member Rick Jones</option>
-                <option value="rsalwan@fremont.gov">Vice Mayor Raj Salwan</option>
-                <option value="tkeng@fremont.gov">Council Member Teresa Keng</option>
-                <option value="yshao@fremont.gov">Council Member Yang Shao</option>
-                <option value="jkassan@fremont.gov">Council Member Jennie Kassan</option>
+            <select id="recipient" onchange="updateMailtoLink()">
+                <!-- Recipient options -->
             </select>
         </div>
         <div class="form-group">
             <label for="subjectSelect">Choose a Subject:</label>
-            <select id="subjectSelect" onchange="populateBody()">
-                <option value="0">Preserve Unity: Reject Divisive Resolutions</option>
-                <option value="1">Stop Hate: No to Biased Israel-Hamas Resolutions</option>
-                <option value="2">Choose Empathy Over Division</option>
-                <option value="3">Unity Not Division: Reject Conflict Resolutions</option>
-                <option value="4">Stand Together: Say No to Divisive Motions</option>
-            </select>
+            <select id="subjectSelect" onchange="populateBody()"></select>
         </div>
         <div class="form-group">
             <label for="subject">Edit Subject:</label>
-            <input type="text" id="subject" name="subject" value="Preserve Unity: Reject Divisive Resolutions" oninput="updateMailtoLink()">
+            <input type="text" id="subject" oninput="updateMailtoLink()">
         </div>
         <div class="form-group">
             <label for="body">Body:</label>
-            <textarea id="body" name="body" rows="10" oninput="updateMailtoLink()"></textarea>
+            <textarea id="body" rows="10" oninput="updateMailtoLink()"></textarea>
         </div>
     </div>
-
-    <!-- Display the mailto link -->
-    <a id="mailtoLink" href="#" onclick="updateMailtoLink();">Compose Email</a>
+    <a id="mailtoLink" href="#">Compose Email</a>
 
     <script>
         var subjectsAndBodies = [
-            {
-                "subject": "Preserve Unity: Reject Divisive Resolutions",
-                "body": "Dear Council Member,\\n\\nAs a Fremont resident deeply invested in the harmony of our community, I urge you to consider the impact of adopting resolutions concerning the Israel-Hamas conflict. Recent events in the Bay Area have shown us the volatile mix of heightened antisemitism and Islamophobia. Introducing one-sided narratives will only exacerbate these tensions, dividing our Muslim and Jewish neighbors further.\\n\\nThe scenes of discord in Oakland and Richmond, marked by hours of public comment filled with hate speech, serve as a caution. We must strive to be a beacon of unity, especially in these challenging times.\\n\\nLet us lead with empathy and inclusiveness, ensuring Fremont remains a welcoming community for all. Rejecting divisive resolutions is a step toward healing and peace.\\n\\nSincerely,\\n[Your Name]"
-            },
-            // Add other subjects and bodies here following the same structure
+            // Subjects and bodies
         ];
 
         function populateBody() {
-            var selectedIndex = document.getElementById('subjectSelect').value;
-            var selectedSubjectAndBody = subjectsAndBodies[selectedIndex];
-            
-            document.getElementById('subject').value = selectedSubjectAndBody.subject;
-            document.getElementById('body').value = selectedSubjectAndBody.body.replace('\\n', '\n').replace('[Your Name]', ''); // Replace '[Your Name]' with an empty string initially
-            
-            updateMailtoLink(); // Update the mailto link to reflect the changes
+            var selected = subjectsAndBodies[document.getElementById('subjectSelect').value];
+            document.getElementById('subject').value = selected.subject;
+            document.getElementById('body').value = selected.body;
+            updateMailtoLink();
         }
 
         function updateMailtoLink() {
-            var from = document.getElementById('from').value;
-            var recipient = document.getElementById('recipient').value;
-            var subject = document.getElementById('subject').value;
-            var body = document.getElementById('body').value;
-
-            // Append "With gratitude, [Your Name]" to the body
-            var fullBody = `${body}\n\nWith gratitude,\n${from}`;
-
-            subject = encodeURIComponent(subject);
-            fullBody = encodeURIComponent(fullBody);
-
-            var link = 'mailto:' + recipient + '?subject=' + subject + '&body=' + fullBody;
-            document.getElementById('mailtoLink').href = link;
+            var from = encodeURIComponent(document.getElementById('from').value);
+            var recipient = encodeURIComponent(document.getElementById('recipient').value);
+            var subject = encodeURIComponent(document.getElementById('subject').value);
+            var body = encodeURIComponent(document.getElementById('body').value + "\n\nWith gratitude,\n" + from);
+            document.getElementById('mailtoLink').href = `mailto:${recipient}?subject=${subject}&body=${body}`;
         }
 
-        // Initialize the page with the first subject and body
-        document.addEventListener('DOMContentLoaded', function() {
-            populateBody();
-        });
+        document.addEventListener('DOMContentLoaded', populateBody);
     </script>
-
 </body>
 </html>
