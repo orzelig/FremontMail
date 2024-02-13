@@ -25,7 +25,7 @@ function loadSubjects() {
 document.addEventListener('DOMContentLoaded', function() {
     loadSubjects();
     loadRecipients();
-    // No need to call populateBody here if it's already being called at the end of loadSubjects
+    populateBody();
 });
 
 
@@ -90,8 +90,3 @@ function loadRecipients() {
         })
         .catch(error => console.error('Failed to load recipient data:', error));
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    loadRecipients();
-    populateBody();
-});
