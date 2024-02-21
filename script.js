@@ -4,6 +4,9 @@ function loadSubjects() {
     fetch('subjectsAndBodies.json')
         .then(response => response.json())
         .then(subjectsAndBodies => {
+            // Shuffle the subjectsAndBodies array before appending options
+            shuffleArray(subjectsAndBodies);
+
             const subjectSelect = document.getElementById('subjectSelect');
             // Clear existing options first, if necessary
             subjectSelect.innerHTML = '';
@@ -19,6 +22,14 @@ function loadSubjects() {
             populateBody();
         })
         .catch(error => console.error('Failed to load subjects:', error));
+}
+
+// Fisher-Yates (Knuth) Shuffle algorithm
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
 }
 
 // Call this function when the page loads to populate the subjects dropdown
