@@ -1,30 +1,50 @@
+// Global variable to store the shuffled subjects and bodies
+let shuffledSubjectsAndBodies = [];
 
-
-function loadSubjects() {
+// Function to fetch, shuffle, and store subjects and bodies
+function fetchAndShuffleData() {
     fetch('subjectsAndBodies.json')
         .then(response => response.json())
-        .then(subjectsAndBodies => {
-            // Shuffle the subjectsAndBodies array before appending options
-            shuffleArray(subjectsAndBodies);
-
-            const subjectSelect = document.getElementById('subjectSelect');
-            // Clear existing options first, if necessary
-            subjectSelect.innerHTML = '';
-
-            subjectsAndBodies.forEach((item, index) => {
-                const option = document.createElement('option');
-                option.value = index; // Using the index as the value to keep track of selected option
-                option.textContent = item.subject;
-                subjectSelect.appendChild(option);
-            });
-
-            // Optionally, populate the body for the initially selected subject
-            populateBody();
+        .then(data => {
+            shuffleArray(data); // Shuffle the data
+            shuffledSubjectsAndBodies = data; // Store the shuffled data globally
+            loadSubjects(); // Load subjects into the dropdown
+            populateBody(); // Populate body for the initially selected subject
         })
-        .catch(error => console.error('Failed to load subjects:', error));
+        .catch(error => console.error('Failed to load subjects and bodies:', error));
 }
 
-// Fisher-Yates (Knuth) Shuffle algorithm
+// Function to load subjects into the dropdown
+function loadSubjects() {
+    const subjectSelect = document.getElementById('subjectSelect');
+    subjectSelect.innerHTML = ''; // Clear existing options
+
+    shuffledSubjectsAndBodies.forEach((item, index) => {
+        const option = document.createElement('option');
+        option.value = index; // Using the index as the value to keep track of selected option
+        option.textContent = item.subject;
+        subjectSelect.appendChild(option);
+    });
+}
+
+// Function to populate the body based on the selected subject
+function populateBody() {
+    var selectedIndex = document.getElementById('subjectSelect').value;
+    selectedIndex = parseInt(selectedIndex, 10); // Ensure it's an integer
+
+    var selectedSubjectAndBody = shuffledSubjectsAndBodies[selectedIndex];
+
+    if (selectedSubjectAndBody) {
+        document.getElementById('subject').value = selectedSubjectAndBody.subject;
+        document.getElementById('body').value = selectedSubjectAndBody.body.replace(/\\n/g, '\n').replace('[Your Name]', '');
+    } else {
+        console.error('Selected subject and body could not be found.');
+    }
+
+    updateMailtoLink(); // Update the mailto link to reflect the changes
+}
+
+// Fisher-Yates (Knuth) Shuffle algorithm for shuffling an array
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -32,37 +52,23 @@ function shuffleArray(array) {
     }
 }
 
-// Call this function when the page loads to populate the subjects dropdown
-document.addEventListener('DOMContentLoaded', function() {
-    loadSubjects();
-    loadRecipients();
-    populateBody();
-});
-
-
-function populateBody() {
-    fetch('subjectsAndBodies.json')
+// Function to load recipients into the dropdown
+function loadRecipients() {
+    fetch('recipients.json')
         .then(response => response.json())
-        .then(subjectsAndBodies => {
-            var selectedIndex = document.getElementById('subjectSelect').value;
-            // Ensure that the selectedIndex is parsed as an integer, as it might be returned as a string
-            selectedIndex = parseInt(selectedIndex, 10);
-
-            var selectedSubjectAndBody = subjectsAndBodies[selectedIndex];
-
-            if (selectedSubjectAndBody) {
-                document.getElementById('subject').value = selectedSubjectAndBody.subject;
-                document.getElementById('body').value = selectedSubjectAndBody.body.replace(/\\n/g, '\n').replace('[Your Name]', '');
-            } else {
-                console.error('Selected subject and body could not be found.');
-            }
-
-            updateMailtoLink(); // Update the mailto link to reflect the changes
+        .then(data => {
+            const recipientSelect = document.getElementById('recipient');
+            data.recipients.forEach(recipient => {
+                const option = document.createElement('option');
+                option.value = recipient.email;
+                option.textContent = recipient.name;
+                recipientSelect.appendChild(option);
+            });
         })
-        .catch(error => console.error('Failed to load subjects and bodies:', error));
+        .catch(error => console.error('Failed to load recipient data:', error));
 }
 
-
+// Function to update the mailto link based on form inputs
 function updateMailtoLink() {
     var from = document.getElementById('from').value;
     var recipient = document.getElementById('recipient').value;
@@ -87,17 +93,8 @@ function updateMailtoLink() {
     document.getElementById('mailtoLink').href = link;
 }
 
-function loadRecipients() {
-    fetch('recipients.json')
-        .then(response => response.json())
-        .then(data => {
-            const recipientSelect = document.getElementById('recipient');
-            data.recipients.forEach(recipient => {
-                const option = document.createElement('option');
-                option.value = recipient.email;
-                option.textContent = recipient.name;
-                recipientSelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Failed to load recipient data:', error));
-}
+// Initialize the application when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    fetchAndShuffleData(); // Fetch and shuffle subjects and bodies
+    loadRecipients(); // Load recipients into the dropdown
+});
