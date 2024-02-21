@@ -1,6 +1,10 @@
 {
   "recipients": [
     {
+      "name": "All Council Members",
+      "email": "citycouncil@fremont.gov"
+    },
+    {
       "name": "Mayor Lily Mei",
       "email": "lmei@fremont.gov"
     },
